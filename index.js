@@ -47,6 +47,13 @@ app.get('/ourTeams', (req, res) => {
       res.send(items)
   })    
 })
+app.get('/statusChange', (req, res) => {
+  reviewStatusCollection.find({statusId: req.query.id})
+  .toArray((err, items) => {
+    console.log(items)
+    res.send(items)
+  })    
+})
 
 app.get('/pithaUser', (req, res) => {
   console.log(req.query.email)
@@ -124,7 +131,17 @@ app.delete('/delete/:id', (req, res) => {
 
 
 });
-
+// update Problem
+app.patch('/updateStatus/:id', (req, res) => {
+  console.log(req.body.status,req.params.id);
+  vramankariCollection.updateOne({_id: ObjectId(req.params.id)},  
+  {
+    $set: {status: req.body.status}
+  })
+  .then (result => {
+    res.send(result.modifiedCount > 0)
+  })
+})
 
 
 
